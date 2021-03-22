@@ -1,0 +1,8 @@
+name: "DDS-Website"
+navbar:
+  title: "DDS Website"
+  left:
+    - text: "About Me"
+      href: index.html
+    - text: "Beer Case Study"
+      href: BeerMarkdown.html
