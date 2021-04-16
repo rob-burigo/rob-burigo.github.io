@@ -1,0 +1,440 @@
+---
+title: "Case Study 2"
+author: "Robert Burigo"
+date: "4/11/2021"
+output: html_document
+---
+
+
+```{r global_options}
+knitr::opts_chunk$set(fig.path='Figs/')
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Presentation Slides: Find Here https://github.com/rob-burigo/CaseStudy2DDS
+
+Youtube Presentation: https://www.youtube.com/watch?v=zrN4GN6Uqyw
+
+Github Website: https://rob-burigo.github.io/
+
+
+## Introduction to the Study
+
+The main goal of this project is explore what characteristics in an employee have the biggest impact on employee retention and also are we then able to predict with good accuracy what employees are likely to turn over.  As a bonus, we will also try and see if we can predict Monthly Salary based on the characteristics provided.  
+
+We have been given a data set with 36 Variables and 870 observations.  This data set contains employee Id's that are tied to relative characteristics like Age, Years at the company , Distance to the Office, etc. 
+
+First, we are going to explore the data set to see if there is anything interesting we can find with a top-level investigation.  Next, we will use this data set to train a KNN model and test that KNN model on the validation set provided trying to get both a sensitivity and specificity of over 60%.  
+
+Lastly, we will build a regression model to predict the monthly salary for the validation set provided and try and get within $3,000 RMSE.  
+
+
+## Executive Summary
+
+Top 3 most important factors when predicting attrition are
+  * Number of Companies that the employee has worked at in their career
+  * The number of years they have spent in their current role
+  * How satisfied they are with their jobs
+  * Age is close fourth 
+We can take this data and use it in our hiring practices by keeping an eye on how long someones resume is while also using it in employee retention by monitoring HR surveys for Job Satisfaction.
+
+Regarding job role specific findings, it was discovered that Manager is the role with the highest median salary
+while Manager and Research Director are positions where Employees stay the longest. 
+
+
+Using EDA and KNN classification model, we are able to predict with decent accuracy whether an employee will leave the company or not.  We were also able to use multiple linear regression to predict the salary of an employee.
+  * This can help us save money in on-boarding (decreasing attrition) as well as become more competitive in our salary      offers.
+
+
+## Read in Data and Libraries Needed
+```{r message=FALSE, warning=FALSE}
+## Read in libraries and Data
+library(tidyverse)
+library(naniar)
+library(GGally)
+library(knitr)
+library(kableExtra)
+library(class)
+library(caret)
+library(e1071)
+library(mltools)
+library(ROSE)
+library(MASS)
+library(scales)
+
+jobs = read.csv(file.choose(), header = TRUE)
+
+```
+
+
+## Summary Statistics
+
+
+```{r message=FALSE, warning=FALSE}
+
+
+
+#data types and null/missing data
+missing_df <- left_join(
+(setNames(cbind(rownames(data.frame(data_type = unlist(map(jobs, class))))
+, data.frame(data_type = unlist(map(jobs, class))), row.names = NULL), 
+c("variable", "data_type"))),miss_var_summary(jobs),
+by=c("variable"="variable"))%>%arrange(desc(n_miss))
+
+
+
+
+jobs1_n <- (jobs[, sapply(jobs, class) != "character"])
+jobs1_c <- (jobs[, sapply(jobs, class) == "character"])
+jobs1_c_names <- names(jobs1_c)
+
+mean = sapply(jobs, mean, na.rm = T) 
+
+
+#median & quartiles
+median_df <- (setNames(cbind(rownames(data.frame(t(data.frame(sapply(jobs1_n, quantile, na.rm = T)))))
+,data.frame(t(data.frame(sapply(jobs1_n, quantile, na.rm = T)))) , row.names = NULL), 
+c("variable", "Min","Q1","Median","Q3","Max")))
+
+median_df$variable <- gsub('\\.', '-', median_df$variable)
+
+
+#mean_df
+mean_df <- (setNames(cbind(rownames(data.frame(data_type = mean ))
+, data.frame(data_type = mean), row.names = NULL), 
+c("variable", "Mean")))
+
+mean_df$variable <- gsub('\\.', '-', mean_df$variable)
+
+
+
+jobs1_c_distinct <- rbind(
+data.frame(Variable = jobs1_c_names[1],Levels = unlist(jobs1_c[,1], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[2],Levels = unlist(jobs1_c[,2], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[3],Levels = unlist(jobs1_c[,3], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[4],Levels = unlist(jobs1_c[,4], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[5],Levels = unlist(jobs1_c[,5], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[6],Levels = unlist(jobs1_c[,6], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[7],Levels = unlist(jobs1_c[,7], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[8],Levels = unlist(jobs1_c[,8], use.names=FALSE))%>%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[9],Levels = unlist(jobs1_c[,9], use.names=FALSE))%>%distinct(Variable,Levels)
+)
+
+jobs1_c_distinct2 <- jobs1_c_distinct%>%group_by(Variable)%>%summarize(Count_of_Levels = n())
+
+
+#final summary
+left_join(
+left_join(
+left_join(missing_df,mean_df,
+ by=c("variable"="variable")), median_df,       
+  by=c("variable"="variable")),jobs1_c_distinct2,
+by=c("variable"="Variable"))%>%dplyr::select(
+variable,data_type,count_missing=n_miss,`Percent Missing (1.00 = 1%)`=pct_miss,Count_of_Levels,Mean,Median,Min,Q1,Q3,Max) %>%
+  kbl() %>%
+  kable_classic_2(full_width = F)%>%
+  add_header_above(c("Summary Statistics of Data" = 11))
+```
+
+## Variables vs. Attrition 
+
+```{r message=FALSE, warning=FALSE}
+
+## PLotting the continuous variables first
+
+jobs[, "age_bin"] <- bin_data(jobs$Age, bins=10, binType = "explicit")
+ggplot(data=jobs, aes(age_bin))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Age Group') 
+
+
+jobs[, "distance_bin"] <- bin_data(jobs$DistanceFromHome, bins=10, binType = "explicit")
+ggplot(data=jobs, aes(distance_bin))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Distance Group') 
+
+
+jobs[, "income_bin"] <- bin_data(jobs$MonthlyIncome, bins=10, binType = "explicit")
+ggplot(data=jobs, aes(income_bin))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Income Group')
+
+
+##Plotting the categorical variables now
+
+ggplot(data=jobs, aes(YearsInCurrentRole))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Years in Current Role')
+
+ggplot(data=jobs, aes(YearsAtCompany))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Years at Company')
+
+ggplot(data=jobs, aes(WorkLifeBalance))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Work Life Balance')
+
+ggplot(data=jobs, aes(NumCompaniesWorked))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Number of Companies Worked')
+
+ggplot(data=jobs, aes(Education))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Education')
+
+ggplot(data=jobs, aes(JobSatisfaction))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Job Satisfaction')
+
+ggplot(data=jobs, aes(JobLevel))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Job Level')
+
+ggplot(data=jobs, aes(JobRole))+
+  geom_bar(aes(fill=Attrition), position="fill")+ ggtitle('% Attrition based on Job Role')
+
+
+#Converting Job Role to Numeric So can use in model
+
+jobs = jobs %>% 
+  mutate(Job_Role_num = case_when(
+    jobs$JobRole=='Healthcare Representative' ~ 1,
+    jobs$JobRole=='Human Resources' ~ 2,
+    jobs$JobRole=='Laboratory Technician' ~ 3,
+    jobs$JobRole=='Manager' ~ 4,
+    jobs$JobRole=='Manufacturing Director' ~ 5,
+    jobs$JobRole=='Research Director' ~ 6,
+    jobs$JobRole=='Research Scientist' ~ 7,
+    jobs$JobRole=='Sales Executive' ~ 8,
+    jobs$JobRole=='Sales Representative' ~ 9
+  )
+)
+
+
+
+
+
+#Creating Data frame of Just the variables that seem important 
+jobs_reduced = jobs[,c(2,3,7,8,16,18,20,22,32,33,34,37,40)]
+
+#Removing Age Bin
+
+drop <- c("age_bin")
+jobs_reduced = jobs_reduced[,!(names(jobs_reduced) %in% drop)]
+
+#Converting Yes/No into 1/0
+jobs_reduced_cor <- jobs_reduced %>%
+      mutate(Attrition = ifelse(Attrition == "No",0,1))
+cor(jobs_reduced_cor)
+
+```
+## Are there any Job Role Specefic Trends
+
+```{r message=FALSE, warning=FALSE}
+
+#Get the median monthly income and median years in current role.
+median_data = jobs %>% group_by(JobRole) %>% summarize(medianMonthlyIncome = median(MonthlyIncome), medianYearsCurrentRole = median(YearsInCurrentRole))
+
+#created a bar chart comparing the median monthly income per job role
+median_data%>%
+  head(10)%>%
+  ggplot(aes(x=reorder(JobRole,medianMonthlyIncome),y=medianMonthlyIncome, fill=JobRole)) +
+  xlab("Job Role")+
+  geom_col() + coord_flip() + ggtitle('Median Monthly Income by Role')
+
+#created a bar chart comparing the median years in current role per job role
+median_data%>%
+  head(10)%>%
+  ggplot(aes(x=reorder(JobRole,medianYearsCurrentRole),y=medianYearsCurrentRole, fill=JobRole)) +
+  xlab("Job Role")+
+  geom_col() + coord_flip() + ggtitle('Median Years in Current Role')
+
+
+## Manager is the role with the highest median salary
+
+## Manager and Research Director are positions where Employees stay the longest. 
+
+```
+
+
+
+
+## Determine Important Features
+```{r message=FALSE, warning=FALSE}
+
+#Converting Response Variable to a Factor to run Log Reg
+jobs_reduced$Attrition = as.factor(jobs_reduced$Attrition)
+
+#Splitting into Train and Test 
+set.seed(512)
+splitPerc = .75
+
+#Running Log Reg and also with a Stepwise to determine important Factors
+
+trainIndices = sample(1:dim(jobs_reduced)[1],round(splitPerc * dim(jobs_reduced)[1]))
+train = jobs_reduced[trainIndices,]
+test = jobs_reduced[-trainIndices,]
+
+full.logistic<-glm(Attrition~.,family="binomial",data=train)
+step.logistic<-full.logistic %>% stepAIC(trace=FALSE)
+
+summary(step.logistic)
+
+# 3 Most Important factors for Attrition are NumCompaniesWorked , YearsInCurrentRole , JobSatisfaction (Age is a close 4th)
+
+```
+
+## KNN Model to Classify Attrition
+```{r message=FALSE, warning=FALSE}
+
+# Adding scaled variables for the variables I will use.  This is to reduce the scale and provide a better model.
+
+jobs_reduced$ZAge = scale(jobs_reduced$Age)
+jobs_reduced$ZJS = scale(jobs_reduced$JobSatisfaction)
+jobs_reduced$ZNumCOmpanies = scale(jobs_reduced$NumCompaniesWorked)
+jobs_reduced$YearsinROle = scale(jobs_reduced$YearsInCurrentRole)
+jobs_reduced$ZWLB = scale(jobs_reduced$WorkLifeBalance)
+jobs_reduced$ZMonthlyIncome = scale(jobs_reduced$MonthlyIncome)
+jobs_reduced$ZDistance = scale(jobs_reduced$DistanceFromHome)
+jobs_reduced$ZYearsComp = scale(jobs_reduced$YearsAtCompany)
+jobs_reduced$ZJobRoleNum = scale(jobs_reduced$Job_Role_num)
+
+
+# Looping for many k and the average of training/test partitions
+
+set.seed(544)
+splitPerc = .80
+
+iterations = 100
+numks = 30
+masterAcc = matrix(nrow = iterations, ncol = numks)
+for(j in 1:iterations)
+{
+accs = data.frame(accuracy = numeric(30), k = numeric(30))
+trainIndices = sample(1:dim(jobs_reduced)[1],round(splitPerc * dim(jobs_reduced)[1]))
+train = jobs_reduced[trainIndices,]
+test = jobs_reduced[-trainIndices,]
+for(i in 1:numks)
+{
+  classifications = knn(train[,c(1,3,6,7,8,9,10,11,12)],test[,c(1,3,6,7,8,9,10,11,12)],train$Attrition, prob = TRUE, k = i)
+  table(classifications,test$Attrition)
+  CM = confusionMatrix(table(classifications,test$Attrition))
+  masterAcc[j,i] = CM$overall[1]
+}
+}
+MeanAcc = colMeans(masterAcc)
+plot(seq(1,numks,1),MeanAcc, type = "l")
+
+# From this it is clear that the best value for k in our KNN is 15.
+# k = 15
+
+# I want to balance out the data set since the majority of the Attrition is No.  After testing I am going to use the over sampling method
+
+train_balanced_over <- ovun.sample(Attrition ~ ., data = jobs_reduced, method = "over",N = 1460)$data
+
+# Running the model
+classifications = knn.cv(train_balanced_over[,c(13,14,15,16,17,18,19,20,21)],train_balanced_over$Attrition, prob = TRUE, k = 15)
+
+# Assessing the Model
+confusionMatrix(classifications,train_balanced_over$Attrition)
+
+#Sensitivity Over .60
+#Specificity Over .75
+
+
+
+## Testing out the KNN Model on the Test Data Set
+
+jobs_no_attrition =  read.csv(file.choose(), header = TRUE)
+jobs_no_attrition = jobs_no_attrition %>% 
+  mutate(Job_Role_num = case_when(
+    jobs_no_attrition$JobRole=='Healthcare Representative' ~ 1,
+    jobs_no_attrition$JobRole=='Human Resources' ~ 2,
+    jobs_no_attrition$JobRole=='Laboratory Technician' ~ 3,
+    jobs_no_attrition$JobRole=='Manager' ~ 4,
+    jobs_no_attrition$JobRole=='Manufacturing Director' ~ 5,
+    jobs_no_attrition$JobRole=='Research Director' ~ 6,
+    jobs_no_attrition$JobRole=='Research Scientist' ~ 7,
+    jobs_no_attrition$JobRole=='Sales Executive' ~ 8,
+    jobs_no_attrition$JobRole=='Sales Representative' ~ 9
+  )
+)
+jobs_reduced_no_attrition = jobs_no_attrition[,c(2,6,17,19,21,31,32,33,36)]
+
+jobs_reduced_no_attrition$ZAge = scale(jobs_reduced_no_attrition$Age)
+jobs_reduced_no_attrition$ZJS = scale(jobs_reduced_no_attrition$JobSatisfaction)
+jobs_reduced_no_attrition$ZNumCOmpanies = scale(jobs_reduced_no_attrition$NumCompaniesWorked)
+jobs_reduced_no_attrition$YearsinROle = scale(jobs_reduced_no_attrition$YearsInCurrentRole)
+jobs_reduced_no_attrition$ZWLB = scale(jobs_reduced_no_attrition$WorkLifeBalance)
+jobs_reduced_no_attrition$ZMonthlyIncome = scale(jobs_reduced_no_attrition$MonthlyIncome)
+jobs_reduced_no_attrition$ZDistance = scale(jobs_reduced_no_attrition$DistanceFromHome)
+jobs_reduced_no_attrition$ZYearsComp = scale(jobs_reduced_no_attrition$YearsAtCompany)
+jobs_reduced_no_attrition$ZJobRoleNum = scale(jobs_reduced_no_attrition$Job_Role_num)
+
+classifications_new = knn(train_balanced_over[,c(13,14,15,16,17,18,19,20,21)],jobs_reduced_no_attrition[,c(10,11,12,13,14,15,16,17,18)],train_balanced_over$Attrition, prob = TRUE, k = 15)
+
+summary(classifications_new)
+
+# Here are the classifications associated with the competition set that I will submit
+
+classifications_new
+```
+## Regression Model to Predict Salary
+
+```{r message=FALSE, warning=FALSE}
+
+# Going to convert the monthly income to a categorical to see which variables are most related with Monthly Income.
+
+jobs = jobs %>% 
+  mutate(Monthly_Income_Block = case_when(
+    jobs$MonthlyIncome<= 5000 ~ '<=5k',
+    jobs$MonthlyIncome > 5000 ~ '>5k',
+
+  )
+)
+
+drop <- c("EmployeeCount","Over18","OverTime","MonthlyIncome","age_bin","distance_bin","income_bin","Job_Role_num")
+jobs_reg = jobs[,!(names(jobs) %in% drop)]
+
+jobs_reg$Monthly_Income_Block = as.factor(jobs_reg$Monthly_Income_Block)
+
+
+#Running Logistic Regression with Stepwise 
+
+full.logistic<-glm(Monthly_Income_Block~.,family="binomial",data=jobs_reg)
+step.logistic<-full.logistic %>% stepAIC(trace=FALSE)
+
+
+# Looking at the summary to figure out which factors are the most significant for salary. 
+
+summary(step.logistic)
+
+
+# Fitting the MLR Model
+set.seed(125)
+splitPerc = .75
+
+trainIndices = sample(1:dim(jobs)[1],round(splitPerc * dim(jobs)[1]))
+train_reg = jobs[trainIndices,]
+test_reg = jobs[-trainIndices,]
+
+fit = lm(MonthlyIncome ~ DistanceFromHome + JobSatisfaction + TotalWorkingYears + Gender + YearsAtCompany + Age + EmployeeNumber + EnvironmentSatisfaction + HourlyRate + JobLevel + YearsInCurrentRole, data = train_reg)
+
+summary(fit)
+
+#Calculating the RMSE
+
+RSS <- c(crossprod(fit$residuals))
+MSE <- RSS / length(fit$residuals)
+RMSE <- sqrt(MSE)
+RMSE
+# RMSE = 1370.196
+
+#Predicting on the Competition Set Set
+
+jobs_no_salary =  read.csv(file.choose(), header = TRUE)
+Preds = predict(fit, newdata = jobs_no_salary)
+as.data.frame(Preds)
+jobs_no_salary$predSalary = Preds
+
+jobs_salary_preds = jobs_no_salary[,c(1,36)]
+
+jobs_salary_preds
+
+```
+

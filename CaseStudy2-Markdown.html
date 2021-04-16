@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Robert Burigo" />
+
+
+<title>Case Study 2</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DDS Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About Me</a>
+</li>
+<li>
+  <a href="CaseStudy2-Markdown.html">Attrition Case Study</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Case Study 2</h1>
+<h4 class="author">Robert Burigo</h4>
+<h4 class="date">4/11/2021</h4>
+
+</div>
+
+
+<pre class="r"><code>knitr::opts_chunk$set(fig.path=&#39;Figs/&#39;)</code></pre>
+<p>Presentation Slides: Find Here <a href="https://github.com/rob-burigo/CaseStudy2DDS" class="uri">https://github.com/rob-burigo/CaseStudy2DDS</a></p>
+<p>Youtube Presentation: <a href="https://www.youtube.com/watch?v=zrN4GN6Uqyw" class="uri">https://www.youtube.com/watch?v=zrN4GN6Uqyw</a></p>
+<p>Github Website: <a href="https://rob-burigo.github.io/" class="uri">https://rob-burigo.github.io/</a></p>
+<div id="introduction-to-the-study" class="section level2">
+<h2>Introduction to the Study</h2>
+<p>The main goal of this project is explore what characteristics in an employee have the biggest impact on employee retention and also are we then able to predict with good accuracy what employees are likely to turn over. As a bonus, we will also try and see if we can predict Monthly Salary based on the characteristics provided.</p>
+<p>We have been given a data set with 36 Variables and 870 observations. This data set contains employee Id’s that are tied to relative characteristics like Age, Years at the company , Distance to the Office, etc.</p>
+<p>First, we are going to explore the data set to see if there is anything interesting we can find with a top-level investigation. Next, we will use this data set to train a KNN model and test that KNN model on the validation set provided trying to get both a sensitivity and specificity of over 60%.</p>
+<p>Lastly, we will build a regression model to predict the monthly salary for the validation set provided and try and get within $3,000 RMSE.</p>
+</div>
+<div id="executive-summary" class="section level2">
+<h2>Executive Summary</h2>
+<p>Top 3 most important factors when predicting attrition are * Number of Companies that the employee has worked at in their career * The number of years they have spent in their current role * How satisfied they are with their jobs * Age is close fourth We can take this data and use it in our hiring practices by keeping an eye on how long someones resume is while also using it in employee retention by monitoring HR surveys for Job Satisfaction.</p>
+<p>Regarding job role specific findings, it was discovered that Manager is the role with the highest median salary while Manager and Research Director are positions where Employees stay the longest.</p>
+<p>Using EDA and KNN classification model, we are able to predict with decent accuracy whether an employee will leave the company or not. We were also able to use multiple linear regression to predict the salary of an employee. * This can help us save money in on-boarding (decreasing attrition) as well as become more competitive in our salary offers.</p>
+</div>
+<div id="read-in-data-and-libraries-needed" class="section level2">
+<h2>Read in Data and Libraries Needed</h2>
+<pre class="r"><code>## Read in libraries and Data
+library(tidyverse)
+library(naniar)
+library(GGally)
+library(knitr)
+library(kableExtra)
+library(class)
+library(caret)
+library(e1071)
+library(mltools)
+library(ROSE)
+library(MASS)
+library(scales)
+
+jobs = read.csv(file.choose(), header = TRUE)</code></pre>
+</div>
+<div id="summary-statistics" class="section level2">
+<h2>Summary Statistics</h2>
+<pre class="r"><code>#data types and null/missing data
+missing_df &lt;- left_join(
+(setNames(cbind(rownames(data.frame(data_type = unlist(map(jobs, class))))
+, data.frame(data_type = unlist(map(jobs, class))), row.names = NULL), 
+c(&quot;variable&quot;, &quot;data_type&quot;))),miss_var_summary(jobs),
+by=c(&quot;variable&quot;=&quot;variable&quot;))%&gt;%arrange(desc(n_miss))
+
+
+
+
+jobs1_n &lt;- (jobs[, sapply(jobs, class) != &quot;character&quot;])
+jobs1_c &lt;- (jobs[, sapply(jobs, class) == &quot;character&quot;])
+jobs1_c_names &lt;- names(jobs1_c)
+
+mean = sapply(jobs, mean, na.rm = T) 
+
+
+#median &amp; quartiles
+median_df &lt;- (setNames(cbind(rownames(data.frame(t(data.frame(sapply(jobs1_n, quantile, na.rm = T)))))
+,data.frame(t(data.frame(sapply(jobs1_n, quantile, na.rm = T)))) , row.names = NULL), 
+c(&quot;variable&quot;, &quot;Min&quot;,&quot;Q1&quot;,&quot;Median&quot;,&quot;Q3&quot;,&quot;Max&quot;)))
+
+median_df$variable &lt;- gsub(&#39;\\.&#39;, &#39;-&#39;, median_df$variable)
+
+
+#mean_df
+mean_df &lt;- (setNames(cbind(rownames(data.frame(data_type = mean ))
+, data.frame(data_type = mean), row.names = NULL), 
+c(&quot;variable&quot;, &quot;Mean&quot;)))
+
+mean_df$variable &lt;- gsub(&#39;\\.&#39;, &#39;-&#39;, mean_df$variable)
+
+
+
+jobs1_c_distinct &lt;- rbind(
+data.frame(Variable = jobs1_c_names[1],Levels = unlist(jobs1_c[,1], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[2],Levels = unlist(jobs1_c[,2], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[3],Levels = unlist(jobs1_c[,3], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[4],Levels = unlist(jobs1_c[,4], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[5],Levels = unlist(jobs1_c[,5], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[6],Levels = unlist(jobs1_c[,6], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[7],Levels = unlist(jobs1_c[,7], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[8],Levels = unlist(jobs1_c[,8], use.names=FALSE))%&gt;%distinct(Variable,Levels),
+data.frame(Variable = jobs1_c_names[9],Levels = unlist(jobs1_c[,9], use.names=FALSE))%&gt;%distinct(Variable,Levels)
+)
+
+jobs1_c_distinct2 &lt;- jobs1_c_distinct%&gt;%group_by(Variable)%&gt;%summarize(Count_of_Levels = n())
+
+
+#final summary
+left_join(
+left_join(
+left_join(missing_df,mean_df,
+ by=c(&quot;variable&quot;=&quot;variable&quot;)), median_df,       
+  by=c(&quot;variable&quot;=&quot;variable&quot;)),jobs1_c_distinct2,
+by=c(&quot;variable&quot;=&quot;Variable&quot;))%&gt;%dplyr::select(
+variable,data_type,count_missing=n_miss,`Percent Missing (1.00 = 1%)`=pct_miss,Count_of_Levels,Mean,Median,Min,Q1,Q3,Max) %&gt;%
+  kbl() %&gt;%
+  kable_classic_2(full_width = F)%&gt;%
+  add_header_above(c(&quot;Summary Statistics of Data&quot; = 11))</code></pre>
+<table class=" lightable-classic-2" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'>
+<thead>
+<tr>
+<th style="padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="11">
+<div style="border-bottom: 1px solid #111111; margin-bottom: -1px; ">
+Summary Statistics of Data
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:left;">
+data_type
+</th>
+<th style="text-align:right;">
+count_missing
+</th>
+<th style="text-align:right;">
+Percent Missing (1.00 = 1%)
+</th>
+<th style="text-align:right;">
+Count_of_Levels
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+Median
+</th>
+<th style="text-align:right;">
+Min
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+Max
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ID
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+435.500000
+</td>
+<td style="text-align:right;">
+435.5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+218.25
+</td>
+<td style="text-align:right;">
+652.75
+</td>
+<td style="text-align:right;">
+870
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+36.828736
+</td>
+<td style="text-align:right;">
+35.0
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+30.00
+</td>
+<td style="text-align:right;">
+43.00
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Attrition
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BusinessTravel
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DailyRate
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+815.227586
+</td>
+<td style="text-align:right;">
+817.5
+</td>
+<td style="text-align:right;">
+103
+</td>
+<td style="text-align:right;">
+472.50
+</td>
+<td style="text-align:right;">
+1165.75
+</td>
+<td style="text-align:right;">
+1499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Department
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DistanceFromHome
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+9.339080
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+14.00
+</td>
+<td style="text-align:right;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Education
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.901149
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EducationField
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EmployeeCount
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.000000
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EmployeeNumber
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1029.832184
+</td>
+<td style="text-align:right;">
+1039.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+477.25
+</td>
+<td style="text-align:right;">
+1561.50
+</td>
+<td style="text-align:right;">
+2064
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EnvironmentSatisfaction
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.701149
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gender
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HourlyRate
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+65.613793
+</td>
+<td style="text-align:right;">
+66.0
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+48.00
+</td>
+<td style="text-align:right;">
+83.00
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+JobInvolvement
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.722989
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+JobLevel
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.039080
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+JobRole
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+JobSatisfaction
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.709195
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MaritalStatus
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MonthlyIncome
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+6390.264368
+</td>
+<td style="text-align:right;">
+4945.5
+</td>
+<td style="text-align:right;">
+1081
+</td>
+<td style="text-align:right;">
+2839.50
+</td>
+<td style="text-align:right;">
+8182.00
+</td>
+<td style="text-align:right;">
+19999
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MonthlyRate
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+14325.620690
+</td>
+<td style="text-align:right;">
+14074.5
+</td>
+<td style="text-align:right;">
+2094
+</td>
+<td style="text-align:right;">
+8092.00
+</td>
+<td style="text-align:right;">
+20456.25
+</td>
+<td style="text-align:right;">
+26997
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NumCompaniesWorked
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.727586
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Over18
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OverTime
+</td>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PercentSalaryHike
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+15.200000
+</td>
+<td style="text-align:right;">
+14.0
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+12.00
+</td>
+<td style="text-align:right;">
+18.00
+</td>
+<td style="text-align:right;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PerformanceRating
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+3.151724
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RelationshipSatisfaction
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.706897
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+StandardHours
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+80.000000
+</td>
+<td style="text-align:right;">
+80.0
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+80.00
+</td>
+<td style="text-align:right;">
+80.00
+</td>
+<td style="text-align:right;">
+80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+StockOptionLevel
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.783908
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TotalWorkingYears
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+11.052874
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+6.00
+</td>
+<td style="text-align:right;">
+15.00
+</td>
+<td style="text-align:right;">
+40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TrainingTimesLastYear
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.832184
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WorkLifeBalance
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.781609
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+YearsAtCompany
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+6.962069
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+10.00
+</td>
+<td style="text-align:right;">
+40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+YearsInCurrentRole
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4.204598
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+7.00
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+YearsSinceLastPromotion
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2.168966
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+YearsWithCurrManager
+</td>
+<td style="text-align:left;">
+integer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4.140230
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+7.00
+</td>
+<td style="text-align:right;">
+17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="variables-vs.-attrition" class="section level2">
+<h2>Variables vs. Attrition</h2>
+<pre class="r"><code>## PLotting the continuous variables first
+
+jobs[, &quot;age_bin&quot;] &lt;- bin_data(jobs$Age, bins=10, binType = &quot;explicit&quot;)
+ggplot(data=jobs, aes(age_bin))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Age Group&#39;) </code></pre>
+<p><img src="Figs/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>jobs[, &quot;distance_bin&quot;] &lt;- bin_data(jobs$DistanceFromHome, bins=10, binType = &quot;explicit&quot;)
+ggplot(data=jobs, aes(distance_bin))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Distance Group&#39;) </code></pre>
+<p><img src="Figs/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code>jobs[, &quot;income_bin&quot;] &lt;- bin_data(jobs$MonthlyIncome, bins=10, binType = &quot;explicit&quot;)
+ggplot(data=jobs, aes(income_bin))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Income Group&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-3.png" width="672" /></p>
+<pre class="r"><code>##Plotting the categorical variables now
+
+ggplot(data=jobs, aes(YearsInCurrentRole))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Years in Current Role&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-4.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(YearsAtCompany))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Years at Company&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-5.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(WorkLifeBalance))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Work Life Balance&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-6.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(NumCompaniesWorked))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Number of Companies Worked&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-7.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(Education))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Education&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-8.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(JobSatisfaction))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Job Satisfaction&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-9.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(JobLevel))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Job Level&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-10.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=jobs, aes(JobRole))+
+  geom_bar(aes(fill=Attrition), position=&quot;fill&quot;)+ ggtitle(&#39;% Attrition based on Job Role&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-3-11.png" width="672" /></p>
+<pre class="r"><code>#Converting Job Role to Numeric So can use in model
+
+jobs = jobs %&gt;% 
+  mutate(Job_Role_num = case_when(
+    jobs$JobRole==&#39;Healthcare Representative&#39; ~ 1,
+    jobs$JobRole==&#39;Human Resources&#39; ~ 2,
+    jobs$JobRole==&#39;Laboratory Technician&#39; ~ 3,
+    jobs$JobRole==&#39;Manager&#39; ~ 4,
+    jobs$JobRole==&#39;Manufacturing Director&#39; ~ 5,
+    jobs$JobRole==&#39;Research Director&#39; ~ 6,
+    jobs$JobRole==&#39;Research Scientist&#39; ~ 7,
+    jobs$JobRole==&#39;Sales Executive&#39; ~ 8,
+    jobs$JobRole==&#39;Sales Representative&#39; ~ 9
+  )
+)
+
+
+
+
+
+#Creating Data frame of Just the variables that seem important 
+jobs_reduced = jobs[,c(2,3,7,8,16,18,20,22,32,33,34,37,40)]
+
+#Removing Age Bin
+
+drop &lt;- c(&quot;age_bin&quot;)
+jobs_reduced = jobs_reduced[,!(names(jobs_reduced) %in% drop)]
+
+#Converting Yes/No into 1/0
+jobs_reduced_cor &lt;- jobs_reduced %&gt;%
+      mutate(Attrition = ifelse(Attrition == &quot;No&quot;,0,1))
+cor(jobs_reduced_cor)</code></pre>
+<pre><code>##                             Age   Attrition DistanceFromHome    Education    JobLevel JobSatisfaction MonthlyIncome
+## Age                 1.000000000 -0.14938358      0.006647112  0.217290207  0.47942356    -0.022363414   0.484288301
+## Attrition          -0.149383577  1.00000000      0.087136293 -0.049442357 -0.16213644    -0.107520935  -0.154914955
+## DistanceFromHome    0.006647112  0.08713629      1.000000000  0.049512940  0.02172705    -0.021218476  -0.006667155
+## Education           0.217290207 -0.04944236      0.049512940  1.000000000  0.13038591     0.013111079   0.127131394
+## JobLevel            0.479423564 -0.16213644      0.021727054  0.130385908  1.00000000    -0.050306065   0.951640049
+## JobSatisfaction    -0.022363414 -0.10752094     -0.021218476  0.013111079 -0.05030606     1.000000000  -0.053148530
+## MonthlyIncome       0.484288301 -0.15491496     -0.006667155  0.127131394  0.95164005    -0.053148530   1.000000000
+## NumCompaniesWorked  0.293521877  0.06101889     -0.048909244  0.160918010  0.14083483    -0.075753415   0.155894318
+## WorkLifeBalance    -0.012229885 -0.08978971     -0.013820292  0.009824289  0.03028387    -0.026470304   0.020804889
+## YearsAtCompany      0.289538716 -0.12875406     -0.020830094  0.061974487  0.52058351     0.028363964   0.491378966
+## YearsInCurrentRole  0.208349696 -0.15621571     -0.008407782  0.061381620  0.39130482    -0.003471690   0.361840521
+## Job_Role_num       -0.105969885  0.09053860     -0.012799586  0.063075019 -0.07429945     0.008906795  -0.075165525
+##                    NumCompaniesWorked WorkLifeBalance YearsAtCompany YearsInCurrentRole Job_Role_num
+## Age                       0.293521877    -0.012229885     0.28953872        0.208349696 -0.105969885
+## Attrition                 0.061018887    -0.089789709    -0.12875406       -0.156215707  0.090538602
+## DistanceFromHome         -0.048909244    -0.013820292    -0.02083009       -0.008407782 -0.012799586
+## Education                 0.160918010     0.009824289     0.06197449        0.061381620  0.063075019
+## JobLevel                  0.140834828     0.030283868     0.52058351        0.391304819 -0.074299446
+## JobSatisfaction          -0.075753415    -0.026470304     0.02836396       -0.003471690  0.008906795
+## MonthlyIncome             0.155894318     0.020804889     0.49137897        0.361840521 -0.075165525
+## NumCompaniesWorked        1.000000000     0.021316529    -0.14202588       -0.103814233 -0.008968013
+## WorkLifeBalance           0.021316529     1.000000000     0.02947258        0.082104934  0.025982297
+## YearsAtCompany           -0.142025883     0.029472580     1.00000000        0.776116418 -0.091223937
+## YearsInCurrentRole       -0.103814233     0.082104934     0.77611642        1.000000000 -0.035873768
+## Job_Role_num             -0.008968013     0.025982297    -0.09122394       -0.035873768  1.000000000</code></pre>
+</div>
+<div id="are-there-any-job-role-specefic-trends" class="section level2">
+<h2>Are there any Job Role Specefic Trends</h2>
+<pre class="r"><code>#Get the median monthly income and median years in current role.
+median_data = jobs %&gt;% group_by(JobRole) %&gt;% summarize(medianMonthlyIncome = median(MonthlyIncome), medianYearsCurrentRole = median(YearsInCurrentRole))
+
+#created a bar chart comparing the median monthly income per job role
+median_data%&gt;%
+  head(10)%&gt;%
+  ggplot(aes(x=reorder(JobRole,medianMonthlyIncome),y=medianMonthlyIncome, fill=JobRole)) +
+  xlab(&quot;Job Role&quot;)+
+  geom_col() + coord_flip() + ggtitle(&#39;Median Monthly Income by Role&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>#created a bar chart comparing the median years in current role per job role
+median_data%&gt;%
+  head(10)%&gt;%
+  ggplot(aes(x=reorder(JobRole,medianYearsCurrentRole),y=medianYearsCurrentRole, fill=JobRole)) +
+  xlab(&quot;Job Role&quot;)+
+  geom_col() + coord_flip() + ggtitle(&#39;Median Years in Current Role&#39;)</code></pre>
+<p><img src="Figs/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>## Manager is the role with the highest median salary
+
+## Manager and Research Director are positions where Employees stay the longest. </code></pre>
+</div>
+<div id="determine-important-features" class="section level2">
+<h2>Determine Important Features</h2>
+<pre class="r"><code>#Converting Response Variable to a Factor to run Log Reg
+jobs_reduced$Attrition = as.factor(jobs_reduced$Attrition)
+
+#Splitting into Train and Test 
+set.seed(512)
+splitPerc = .75
+
+#Running Log Reg and also with a Stepwise to determine important Factors
+
+trainIndices = sample(1:dim(jobs_reduced)[1],round(splitPerc * dim(jobs_reduced)[1]))
+train = jobs_reduced[trainIndices,]
+test = jobs_reduced[-trainIndices,]
+
+full.logistic&lt;-glm(Attrition~.,family=&quot;binomial&quot;,data=train)
+step.logistic&lt;-full.logistic %&gt;% stepAIC(trace=FALSE)
+
+summary(step.logistic)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Attrition ~ Age + DistanceFromHome + JobSatisfaction + 
+##     MonthlyIncome + NumCompaniesWorked + WorkLifeBalance + YearsAtCompany + 
+##     YearsInCurrentRole + Job_Role_num, family = &quot;binomial&quot;, data = train)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.4684  -0.6068  -0.4568  -0.2795   2.9808  
+## 
+## Coefficients:
+##                      Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)         9.763e-01  7.616e-01   1.282 0.199890    
+## Age                -4.275e-02  1.601e-02  -2.670 0.007578 ** 
+## DistanceFromHome    3.437e-02  1.362e-02   2.523 0.011636 *  
+## JobSatisfaction    -2.974e-01  1.027e-01  -2.896 0.003774 ** 
+## MonthlyIncome      -9.661e-05  3.999e-05  -2.416 0.015708 *  
+## NumCompaniesWorked  1.630e-01  4.691e-02   3.474 0.000513 ***
+## WorkLifeBalance    -3.784e-01  1.520e-01  -2.489 0.012819 *  
+## YearsAtCompany      8.305e-02  3.618e-02   2.295 0.021719 *  
+## YearsInCurrentRole -1.532e-01  5.509e-02  -2.780 0.005433 ** 
+## Job_Role_num        7.819e-02  4.745e-02   1.648 0.099390 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 562.19  on 651  degrees of freedom
+## Residual deviance: 503.89  on 642  degrees of freedom
+## AIC: 523.89
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code># 3 Most Important factors for Attrition are NumCompaniesWorked , YearsInCurrentRole , JobSatisfaction (Age is a close 4th)</code></pre>
+</div>
+<div id="knn-model-to-classify-attrition" class="section level2">
+<h2>KNN Model to Classify Attrition</h2>
+<pre class="r"><code># Adding scaled variables for the variables I will use.  This is to reduce the scale and provide a better model.
+
+jobs_reduced$ZAge = scale(jobs_reduced$Age)
+jobs_reduced$ZJS = scale(jobs_reduced$JobSatisfaction)
+jobs_reduced$ZNumCOmpanies = scale(jobs_reduced$NumCompaniesWorked)
+jobs_reduced$YearsinROle = scale(jobs_reduced$YearsInCurrentRole)
+jobs_reduced$ZWLB = scale(jobs_reduced$WorkLifeBalance)
+jobs_reduced$ZMonthlyIncome = scale(jobs_reduced$MonthlyIncome)
+jobs_reduced$ZDistance = scale(jobs_reduced$DistanceFromHome)
+jobs_reduced$ZYearsComp = scale(jobs_reduced$YearsAtCompany)
+jobs_reduced$ZJobRoleNum = scale(jobs_reduced$Job_Role_num)
+
+
+# Looping for many k and the average of training/test partitions
+
+set.seed(544)
+splitPerc = .80
+
+iterations = 100
+numks = 30
+masterAcc = matrix(nrow = iterations, ncol = numks)
+for(j in 1:iterations)
+{
+accs = data.frame(accuracy = numeric(30), k = numeric(30))
+trainIndices = sample(1:dim(jobs_reduced)[1],round(splitPerc * dim(jobs_reduced)[1]))
+train = jobs_reduced[trainIndices,]
+test = jobs_reduced[-trainIndices,]
+for(i in 1:numks)
+{
+  classifications = knn(train[,c(1,3,6,7,8,9,10,11,12)],test[,c(1,3,6,7,8,9,10,11,12)],train$Attrition, prob = TRUE, k = i)
+  table(classifications,test$Attrition)
+  CM = confusionMatrix(table(classifications,test$Attrition))
+  masterAcc[j,i] = CM$overall[1]
+}
+}
+MeanAcc = colMeans(masterAcc)
+plot(seq(1,numks,1),MeanAcc, type = &quot;l&quot;)</code></pre>
+<p><img src="Figs/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code># From this it is clear that the best value for k in our KNN is 15.
+# k = 15
+
+# I want to balance out the data set since the majority of the Attrition is No.  After testing I am going to use the over sampling method
+
+train_balanced_over &lt;- ovun.sample(Attrition ~ ., data = jobs_reduced, method = &quot;over&quot;,N = 1460)$data
+
+# Running the model
+classifications = knn.cv(train_balanced_over[,c(13,14,15,16,17,18,19,20,21)],train_balanced_over$Attrition, prob = TRUE, k = 15)
+
+# Assessing the Model
+confusionMatrix(classifications,train_balanced_over$Attrition)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  No Yes
+##        No  445 171
+##        Yes 285 559
+##                                           
+##                Accuracy : 0.6877          
+##                  95% CI : (0.6632, 0.7114)
+##     No Information Rate : 0.5             
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.3753          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 1.212e-07       
+##                                           
+##             Sensitivity : 0.6096          
+##             Specificity : 0.7658          
+##          Pos Pred Value : 0.7224          
+##          Neg Pred Value : 0.6623          
+##              Prevalence : 0.5000          
+##          Detection Rate : 0.3048          
+##    Detection Prevalence : 0.4219          
+##       Balanced Accuracy : 0.6877          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<pre class="r"><code>#Sensitivity Over .60
+#Specificity Over .75
+
+
+
+## Testing out the KNN Model on the Test Data Set
+
+jobs_no_attrition =  read.csv(file.choose(), header = TRUE)
+jobs_no_attrition = jobs_no_attrition %&gt;% 
+  mutate(Job_Role_num = case_when(
+    jobs_no_attrition$JobRole==&#39;Healthcare Representative&#39; ~ 1,
+    jobs_no_attrition$JobRole==&#39;Human Resources&#39; ~ 2,
+    jobs_no_attrition$JobRole==&#39;Laboratory Technician&#39; ~ 3,
+    jobs_no_attrition$JobRole==&#39;Manager&#39; ~ 4,
+    jobs_no_attrition$JobRole==&#39;Manufacturing Director&#39; ~ 5,
+    jobs_no_attrition$JobRole==&#39;Research Director&#39; ~ 6,
+    jobs_no_attrition$JobRole==&#39;Research Scientist&#39; ~ 7,
+    jobs_no_attrition$JobRole==&#39;Sales Executive&#39; ~ 8,
+    jobs_no_attrition$JobRole==&#39;Sales Representative&#39; ~ 9
+  )
+)
+jobs_reduced_no_attrition = jobs_no_attrition[,c(2,6,17,19,21,31,32,33,36)]
+
+jobs_reduced_no_attrition$ZAge = scale(jobs_reduced_no_attrition$Age)
+jobs_reduced_no_attrition$ZJS = scale(jobs_reduced_no_attrition$JobSatisfaction)
+jobs_reduced_no_attrition$ZNumCOmpanies = scale(jobs_reduced_no_attrition$NumCompaniesWorked)
+jobs_reduced_no_attrition$YearsinROle = scale(jobs_reduced_no_attrition$YearsInCurrentRole)
+jobs_reduced_no_attrition$ZWLB = scale(jobs_reduced_no_attrition$WorkLifeBalance)
+jobs_reduced_no_attrition$ZMonthlyIncome = scale(jobs_reduced_no_attrition$MonthlyIncome)
+jobs_reduced_no_attrition$ZDistance = scale(jobs_reduced_no_attrition$DistanceFromHome)
+jobs_reduced_no_attrition$ZYearsComp = scale(jobs_reduced_no_attrition$YearsAtCompany)
+jobs_reduced_no_attrition$ZJobRoleNum = scale(jobs_reduced_no_attrition$Job_Role_num)
+
+classifications_new = knn(train_balanced_over[,c(13,14,15,16,17,18,19,20,21)],jobs_reduced_no_attrition[,c(10,11,12,13,14,15,16,17,18)],train_balanced_over$Attrition, prob = TRUE, k = 15)
+
+summary(classifications_new)</code></pre>
+<pre><code>##  No Yes 
+## 178 122</code></pre>
+<pre class="r"><code># Here are the classifications associated with the competition set that I will submit
+
+classifications_new</code></pre>
+<pre><code>##   [1] No  No  Yes No  No  No  Yes No  Yes Yes Yes No  Yes No  No  Yes No  Yes No  No  No  No  No  Yes Yes No  No  Yes Yes
+##  [30] Yes No  No  No  No  Yes Yes No  No  No  No  No  No  No  No  Yes No  No  Yes Yes No  No  No  No  No  No  No  No  Yes
+##  [59] Yes No  Yes No  Yes No  No  Yes No  Yes Yes Yes No  Yes Yes Yes No  No  No  Yes No  No  No  No  Yes Yes Yes No  No 
+##  [88] No  No  Yes Yes No  No  No  Yes Yes No  Yes No  Yes No  No  No  No  Yes No  No  No  No  No  Yes No  Yes No  No  No 
+## [117] No  No  Yes No  No  No  No  Yes No  No  Yes No  No  No  Yes No  No  Yes Yes No  Yes No  Yes Yes Yes No  Yes No  No 
+## [146] No  Yes Yes No  No  Yes No  No  Yes Yes Yes Yes Yes Yes No  No  No  Yes Yes No  Yes No  Yes No  No  Yes No  Yes No 
+## [175] No  No  No  No  No  No  Yes Yes No  No  Yes Yes No  Yes Yes No  No  No  Yes No  Yes Yes No  No  No  Yes No  No  No 
+## [204] Yes No  Yes No  Yes Yes No  Yes No  Yes Yes No  No  Yes No  Yes No  No  No  No  No  Yes No  No  No  No  Yes Yes Yes
+## [233] No  No  No  No  No  No  No  No  Yes No  No  No  No  Yes Yes Yes No  No  Yes Yes No  Yes No  No  No  Yes No  No  No 
+## [262] Yes No  Yes No  Yes No  No  No  Yes Yes Yes Yes Yes Yes Yes Yes Yes No  Yes Yes No  Yes Yes Yes Yes No  No  Yes No 
+## [291] Yes Yes No  Yes No  No  No  Yes No  No 
+## attr(,&quot;prob&quot;)
+##   [1] 0.7333333 0.5333333 0.7647059 1.0000000 1.0000000 0.6250000 0.6111111 0.5333333 0.6363636 0.5333333 0.8235294
+##  [12] 0.5555556 0.9047619 1.0000000 0.7333333 0.6842105 0.6000000 0.7647059 0.7333333 0.5294118 0.5333333 0.5263158
+##  [23] 0.7333333 0.7058824 0.7647059 1.0000000 0.6000000 0.8947368 0.8666667 0.5555556 1.0000000 0.5625000 1.0000000
+##  [34] 0.8000000 0.8125000 0.8000000 0.5555556 1.0000000 0.6875000 1.0000000 0.7333333 0.6666667 1.0000000 0.5714286
+##  [45] 0.7777778 1.0000000 1.0000000 0.7894737 0.6666667 0.6666667 0.7333333 1.0000000 0.7058824 0.7777778 0.7333333
+##  [56] 0.7333333 1.0000000 0.9333333 0.5714286 1.0000000 0.6000000 0.7777778 0.6250000 0.8000000 1.0000000 0.8823529
+##  [67] 0.6000000 0.6666667 0.5555556 0.7647059 0.6315789 0.6666667 0.6250000 0.8125000 1.0000000 1.0000000 1.0000000
+##  [78] 0.7777778 0.5333333 0.8666667 0.6000000 0.6000000 0.8125000 0.5333333 0.8000000 0.7333333 0.8000000 0.7333333
+##  [89] 0.5333333 0.5625000 0.6250000 0.6666667 0.5000000 1.0000000 0.9090909 0.6000000 1.0000000 0.8125000 0.5882353
+## [100] 0.7333333 1.0000000 0.6666667 1.0000000 1.0000000 0.8500000 1.0000000 0.6666667 1.0000000 0.8666667 1.0000000
+## [111] 0.7368421 0.7058824 0.5625000 0.5625000 1.0000000 0.6666667 0.5333333 0.6000000 0.7647059 0.8666667 0.5882353
+## [122] 0.7058824 1.0000000 0.6250000 0.5333333 0.6666667 0.7333333 0.7058824 0.6666667 1.0000000 0.6000000 0.8000000
+## [133] 0.5333333 0.6666667 0.7333333 1.0000000 0.6250000 0.6000000 0.6470588 0.7333333 0.7647059 1.0000000 0.8000000
+## [144] 0.6666667 0.6666667 0.8000000 0.5882353 0.5238095 0.7222222 0.7333333 0.6666667 1.0000000 1.0000000 0.5333333
+## [155] 0.6666667 0.6315789 0.7727273 0.5882353 0.6666667 0.6666667 0.5789474 0.6000000 0.5333333 0.5333333 1.0000000
+## [166] 0.8000000 0.7333333 0.8666667 0.7333333 0.6666667 0.6000000 1.0000000 0.8666667 0.7333333 0.6000000 0.7333333
+## [177] 1.0000000 0.7333333 1.0000000 0.6000000 0.6875000 0.6000000 1.0000000 0.6315789 0.5294118 0.5333333 0.8000000
+## [188] 0.7333333 0.7142857 1.0000000 0.5882353 0.6666667 0.6470588 0.7333333 0.8000000 0.5625000 0.6000000 1.0000000
+## [199] 0.7333333 0.5333333 0.6666667 0.5333333 0.6000000 0.6666667 1.0000000 0.9333333 0.6666667 0.9047619 0.6956522
+## [210] 1.0000000 0.7500000 1.0000000 0.7222222 0.9444444 0.8000000 1.0000000 0.8235294 0.6000000 0.8823529 0.6842105
+## [221] 1.0000000 0.5333333 0.5333333 0.7058824 0.6666667 0.6666667 1.0000000 0.8125000 0.7333333 0.7333333 0.6315789
+## [232] 0.7647059 0.7333333 0.8000000 0.6000000 0.7333333 0.6000000 1.0000000 0.7333333 0.8235294 0.7777778 0.5333333
+## [243] 1.0000000 1.0000000 0.5333333 0.5000000 0.7368421 0.5294118 0.5625000 0.7333333 0.8947368 0.5625000 1.0000000
+## [254] 0.9411765 1.0000000 1.0000000 1.0000000 0.5333333 0.6666667 0.5294118 1.0000000 0.7222222 1.0000000 0.5333333
+## [265] 0.7333333 0.6666667 0.5333333 0.7333333 0.6000000 0.5625000 0.5333333 0.8000000 0.6666667 0.8500000 0.7333333
+## [276] 0.7333333 0.7333333 0.6666667 0.5333333 1.0000000 0.8666667 1.0000000 0.5333333 1.0000000 0.6666667 0.5882353
+## [287] 1.0000000 0.8125000 0.8000000 0.6666667 0.6875000 0.6666667 0.7647059 0.8666667 0.6875000 0.6666667 1.0000000
+## [298] 0.8235294 0.6000000 0.7333333
+## Levels: No Yes</code></pre>
+</div>
+<div id="regression-model-to-predict-salary" class="section level2">
+<h2>Regression Model to Predict Salary</h2>
+<pre class="r"><code># Going to convert the monthly income to a categorical to see which variables are most related with Monthly Income.
+
+jobs = jobs %&gt;% 
+  mutate(Monthly_Income_Block = case_when(
+    jobs$MonthlyIncome&lt;= 5000 ~ &#39;&lt;=5k&#39;,
+    jobs$MonthlyIncome &gt; 5000 ~ &#39;&gt;5k&#39;,
+
+  )
+)
+
+drop &lt;- c(&quot;EmployeeCount&quot;,&quot;Over18&quot;,&quot;OverTime&quot;,&quot;MonthlyIncome&quot;,&quot;age_bin&quot;,&quot;distance_bin&quot;,&quot;income_bin&quot;,&quot;Job_Role_num&quot;)
+jobs_reg = jobs[,!(names(jobs) %in% drop)]
+
+jobs_reg$Monthly_Income_Block = as.factor(jobs_reg$Monthly_Income_Block)
+
+
+#Running Logistic Regression with Stepwise 
+
+full.logistic&lt;-glm(Monthly_Income_Block~.,family=&quot;binomial&quot;,data=jobs_reg)
+step.logistic&lt;-full.logistic %&gt;% stepAIC(trace=FALSE)
+
+
+# Looking at the summary to figure out which factors are the most significant for salary. 
+
+summary(step.logistic)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Monthly_Income_Block ~ ID + Age + BusinessTravel + 
+##     DistanceFromHome + EmployeeNumber + EnvironmentSatisfaction + 
+##     Gender + HourlyRate + JobLevel + JobSatisfaction + TotalWorkingYears + 
+##     YearsAtCompany + YearsInCurrentRole, family = &quot;binomial&quot;, 
+##     data = jobs_reg)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.24736  -0.00005  -0.00002   0.00004   1.72927  
+## 
+## Coefficients:
+##                                   Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)                     -4.423e+01  1.718e+03  -0.026   0.9795   
+## ID                              -8.516e-04  5.090e-04  -1.673   0.0943 . 
+## Age                              2.784e-02  1.990e-02   1.399   0.1619   
+## BusinessTravelTravel_Frequently -2.530e-01  4.462e-01  -0.567   0.5707   
+## BusinessTravelTravel_Rarely      3.739e-01  3.797e-01   0.985   0.3248   
+## DistanceFromHome                -3.928e-02  1.504e-02  -2.612   0.0090 **
+## EmployeeNumber                   3.464e-04  2.081e-04   1.665   0.0960 . 
+## EnvironmentSatisfaction         -1.706e-01  1.165e-01  -1.464   0.1432   
+## GenderMale                       4.748e-01  2.561e-01   1.854   0.0638 . 
+## HourlyRate                       9.841e-03  6.383e-03   1.542   0.1231   
+## JobLevel                         2.119e+01  8.590e+02   0.025   0.9803   
+## JobSatisfaction                  2.668e-01  1.152e-01   2.317   0.0205 * 
+## TotalWorkingYears                7.291e-02  4.155e-02   1.755   0.0793 . 
+## YearsAtCompany                  -1.061e-01  5.609e-02  -1.891   0.0586 . 
+## YearsInCurrentRole               9.316e-02  6.579e-02   1.416   0.1568   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1205.78  on 869  degrees of freedom
+## Residual deviance:  370.73  on 855  degrees of freedom
+## AIC: 400.73
+## 
+## Number of Fisher Scoring iterations: 20</code></pre>
+<pre class="r"><code># Fitting the MLR Model
+set.seed(125)
+splitPerc = .75
+
+trainIndices = sample(1:dim(jobs)[1],round(splitPerc * dim(jobs)[1]))
+train_reg = jobs[trainIndices,]
+test_reg = jobs[-trainIndices,]
+
+fit = lm(MonthlyIncome ~ DistanceFromHome + JobSatisfaction + TotalWorkingYears + Gender + YearsAtCompany + Age + EmployeeNumber + EnvironmentSatisfaction + HourlyRate + JobLevel + YearsInCurrentRole, data = train_reg)
+
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MonthlyIncome ~ DistanceFromHome + JobSatisfaction + 
+##     TotalWorkingYears + Gender + YearsAtCompany + Age + EmployeeNumber + 
+##     EnvironmentSatisfaction + HourlyRate + JobLevel + YearsInCurrentRole, 
+##     data = train_reg)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5797.7  -912.3    47.8   752.7  3950.0 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)             -1.538e+03  3.976e+02  -3.867 0.000121 ***
+## DistanceFromHome        -1.581e+01  6.625e+00  -2.387 0.017294 *  
+## JobSatisfaction         -4.701e+01  4.933e+01  -0.953 0.341007    
+## TotalWorkingYears        6.193e+01  1.533e+01   4.041 5.97e-05 ***
+## GenderMale               1.753e+02  1.109e+02   1.581 0.114340    
+## YearsAtCompany          -1.554e+01  1.634e+01  -0.952 0.341663    
+## Age                     -1.671e+00  8.363e+00  -0.200 0.841705    
+## EmployeeNumber           3.434e-02  8.901e-02   0.386 0.699787    
+## EnvironmentSatisfaction -7.303e+01  4.911e+01  -1.487 0.137505    
+## HourlyRate               1.555e+00  2.733e+00   0.569 0.569506    
+## JobLevel                 3.763e+03  8.017e+01  46.930  &lt; 2e-16 ***
+## YearsInCurrentRole      -1.649e+01  2.399e+01  -0.687 0.492167    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1383 on 640 degrees of freedom
+## Multiple R-squared:  0.9151, Adjusted R-squared:  0.9136 
+## F-statistic:   627 on 11 and 640 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>#Calculating the RMSE
+
+RSS &lt;- c(crossprod(fit$residuals))
+MSE &lt;- RSS / length(fit$residuals)
+RMSE &lt;- sqrt(MSE)
+RMSE</code></pre>
+<pre><code>## [1] 1370.196</code></pre>
+<pre class="r"><code># RMSE = 1370.196
+
+#Predicting on the Competition Set Set
+
+jobs_no_salary =  read.csv(file.choose(), header = TRUE)
+Preds = predict(fit, newdata = jobs_no_salary)
+as.data.frame(Preds)</code></pre>
+<pre><code>##         Preds
+## 1    6214.062
+## 2    1976.746
+## 3   14431.261
+## 4    2366.222
+## 5    2084.604
+## 6    6788.001
+## 7    5871.118
+## 8    1991.340
+## 9    2275.551
+## 10  14727.052
+## 11  11085.810
+## 12   2599.381
+## 13   6002.906
+## 14   5956.607
+## 15   6668.779
+## 16   5868.969
+## 17   6003.497
+## 18   6120.984
+## 19   5992.447
+## 20   2278.470
+## 21   6141.351
+## 22   9670.955
+## 23   9688.190
+## 24   5745.562
+## 25  11081.247
+## 26   9999.319
+## 27  10178.563
+## 28  14187.064
+## 29   5908.563
+## 30   2173.966
+## 31   2526.353
+## 32   6523.462
+## 33   6371.900
+## 34   2734.505
+## 35  14379.989
+## 36   5688.525
+## 37  10629.714
+## 38   6021.554
+## 39   2053.996
+## 40   2153.150
+## 41  18424.915
+## 42   2446.545
+## 43   2398.031
+## 44   9954.480
+## 45   5907.013
+## 46   5995.545
+## 47   2169.542
+## 48   5871.110
+## 49   2006.854
+## 50   2666.686
+## 51   2130.064
+## 52   1839.569
+## 53   6355.284
+## 54   6394.589
+## 55  14928.285
+## 56   2050.001
+## 57   6055.973
+## 58  10159.521
+## 59   1826.703
+## 60   2229.266
+## 61   6175.861
+## 62   9722.705
+## 63  10090.922
+## 64   2081.872
+## 65   2393.450
+## 66   2462.125
+## 67  10611.891
+## 68  10560.701
+## 69   6497.608
+## 70   2122.658
+## 71   2823.592
+## 72   9919.256
+## 73  10436.727
+## 74   5926.132
+## 75   1724.966
+## 76   6223.857
+## 77   2170.044
+## 78   1822.114
+## 79   2007.884
+## 80   5693.432
+## 81   2411.093
+## 82   5841.644
+## 83   5966.760
+## 84   1994.414
+## 85   6203.599
+## 86   9878.094
+## 87  11453.135
+## 88   1802.525
+## 89  10511.468
+## 90  18760.348
+## 91   2008.495
+## 92   5848.896
+## 93   6581.661
+## 94   6225.619
+## 95   1931.792
+## 96  18190.296
+## 97   1744.642
+## 98   9974.414
+## 99  15064.367
+## 100  2250.269
+## 101  5840.364
+## 102  5726.531
+## 103  2231.498
+## 104  1987.530
+## 105  5558.334
+## 106  1940.630
+## 107  7072.157
+## 108  2155.751
+## 109  9806.713
+## 110 18675.435
+## 111  1886.786
+## 112 10123.369
+## 113  2156.017
+## 114  2001.126
+## 115  5997.737
+## 116  2434.757
+## 117  2086.726
+## 118  6040.799
+## 119 10036.415
+## 120  2096.938
+## 121  6168.458
+## 122  2195.150
+## 123  6067.952
+## 124  6271.886
+## 125  5769.066
+## 126  6218.090
+## 127  2093.841
+## 128 14428.877
+## 129  9955.433
+## 130  1903.333
+## 131  6790.417
+## 132  6213.513
+## 133  6215.833
+## 134  6897.902
+## 135  2258.594
+## 136  6047.657
+## 137  1964.634
+## 138  5951.689
+## 139 18147.751
+## 140  6333.024
+## 141 10635.195
+## 142  6325.452
+## 143  6015.636
+## 144  6387.099
+## 145  5765.942
+## 146  2041.719
+## 147  2263.577
+## 148 10023.063
+## 149  9797.692
+## 150  2105.211
+## 151  6103.067
+## 152  5935.722
+## 153  5814.464
+## 154 10591.492
+## 155 14363.285
+## 156 18174.810
+## 157  6563.571
+## 158  5886.382
+## 159  5995.338
+## 160 10898.641
+## 161  6036.574
+## 162  2538.492
+## 163  9773.897
+## 164  2129.888
+## 165  6210.679
+## 166  1895.710
+## 167  5399.956
+## 168 10117.968
+## 169  9950.544
+## 170  5796.378
+## 171  1927.274
+## 172  2542.839
+## 173  9961.062
+## 174  6473.333
+## 175  2065.819
+## 176  2325.042
+## 177  6257.302
+## 178  9848.270
+## 179  1943.507
+## 180  6123.722
+## 181 10875.240
+## 182  2023.988
+## 183  5946.889
+## 184  2134.881
+## 185  2311.573
+## 186  2658.434
+## 187  6245.947
+## 188 13727.151
+## 189  6882.542
+## 190  2542.316
+## 191  6430.329
+## 192  5963.534
+## 193  6221.552
+## 194  2162.510
+## 195  6297.093
+## 196  2307.959
+## 197  3100.544
+## 198 18487.840
+## 199  5990.499
+## 200  2096.968
+## 201  2092.063
+## 202  6136.283
+## 203  1812.852
+## 204  6160.742
+## 205  5957.262
+## 206 14369.264
+## 207 18016.985
+## 208  6042.608
+## 209  6297.272
+## 210  6439.578
+## 211  2524.152
+## 212  2046.424
+## 213  2047.477
+## 214  6563.733
+## 215  9497.863
+## 216 10284.453
+## 217  6218.088
+## 218  2397.537
+## 219  2271.331
+## 220  5749.989
+## 221  5680.605
+## 222  6089.979
+## 223  9771.047
+## 224  6034.914
+## 225  6222.557
+## 226  6112.380
+## 227  3011.583
+## 228  2080.198
+## 229  2330.572
+## 230  6170.386
+## 231 17649.922
+## 232  5943.886
+## 233  6225.837
+## 234 11497.476
+## 235  2398.110
+## 236  2070.491
+## 237  2423.777
+## 238  6339.903
+## 239  5552.302
+## 240  6048.203
+## 241  6109.195
+## 242 10323.249
+## 243 10174.223
+## 244  6771.304
+## 245 10489.722
+## 246  2075.150
+## 247  6822.876
+## 248  5995.932
+## 249 10743.818
+## 250  1995.800
+## 251 10350.144
+## 252 14951.994
+## 253  6229.776
+## 254 14349.839
+## 255  1781.901
+## 256  2136.736
+## 257  2196.663
+## 258  5895.610
+## 259 14208.161
+## 260  2361.109
+## 261 10157.397
+## 262 13976.664
+## 263  6058.000
+## 264  2002.542
+## 265  2455.011
+## 266  2594.218
+## 267  2817.084
+## 268  6215.940
+## 269 10368.303
+## 270 13661.589
+## 271  6004.730
+## 272  6092.816
+## 273 10835.799
+## 274  6112.259
+## 275  6522.441
+## 276  5679.175
+## 277  6150.829
+## 278  2241.660
+## 279  2199.471
+## 280  6177.215
+## 281  2081.508
+## 282  6088.985
+## 283  6338.488
+## 284  1774.343
+## 285  6054.774
+## 286 14231.385
+## 287  2208.989
+## 288  6599.882
+## 289  2105.035
+## 290  6258.290
+## 291  2211.283
+## 292 10065.833
+## 293  2059.491
+## 294 10018.908
+## 295  2163.921
+## 296  1874.686
+## 297  9944.738
+## 298  5835.811
+## 299  2240.385
+## 300  2179.194</code></pre>
+<pre class="r"><code>jobs_no_salary$predSalary = Preds
+
+jobs_salary_preds = jobs_no_salary[,c(1,36)]
+
+jobs_salary_preds</code></pre>
+<pre><code>##       ID predSalary
+## 1    871   6214.062
+## 2    872   1976.746
+## 3    873  14431.261
+## 4    874   2366.222
+## 5    875   2084.604
+## 6    876   6788.001
+## 7    877   5871.118
+## 8    878   1991.340
+## 9    879   2275.551
+## 10   880  14727.052
+## 11   881  11085.810
+## 12   882   2599.381
+## 13   883   6002.906
+## 14   884   5956.607
+## 15   885   6668.779
+## 16   886   5868.969
+## 17   887   6003.497
+## 18   888   6120.984
+## 19   889   5992.447
+## 20   890   2278.470
+## 21   891   6141.351
+## 22   892   9670.955
+## 23   893   9688.190
+## 24   894   5745.562
+## 25   895  11081.247
+## 26   896   9999.319
+## 27   897  10178.563
+## 28   898  14187.064
+## 29   899   5908.563
+## 30   900   2173.966
+## 31   901   2526.353
+## 32   902   6523.462
+## 33   903   6371.900
+## 34   904   2734.505
+## 35   905  14379.989
+## 36   906   5688.525
+## 37   907  10629.714
+## 38   908   6021.554
+## 39   909   2053.996
+## 40   910   2153.150
+## 41   911  18424.915
+## 42   912   2446.545
+## 43   913   2398.031
+## 44   914   9954.480
+## 45   915   5907.013
+## 46   916   5995.545
+## 47   917   2169.542
+## 48   918   5871.110
+## 49   919   2006.854
+## 50   920   2666.686
+## 51   921   2130.064
+## 52   922   1839.569
+## 53   923   6355.284
+## 54   924   6394.589
+## 55   925  14928.285
+## 56   926   2050.001
+## 57   927   6055.973
+## 58   928  10159.521
+## 59   929   1826.703
+## 60   930   2229.266
+## 61   931   6175.861
+## 62   932   9722.705
+## 63   933  10090.922
+## 64   934   2081.872
+## 65   935   2393.450
+## 66   936   2462.125
+## 67   937  10611.891
+## 68   938  10560.701
+## 69   939   6497.608
+## 70   940   2122.658
+## 71   941   2823.592
+## 72   942   9919.256
+## 73   943  10436.727
+## 74   944   5926.132
+## 75   945   1724.966
+## 76   946   6223.857
+## 77   947   2170.044
+## 78   948   1822.114
+## 79   949   2007.884
+## 80   950   5693.432
+## 81   951   2411.093
+## 82   952   5841.644
+## 83   953   5966.760
+## 84   954   1994.414
+## 85   955   6203.599
+## 86   956   9878.094
+## 87   957  11453.135
+## 88   958   1802.525
+## 89   959  10511.468
+## 90   960  18760.348
+## 91   961   2008.495
+## 92   962   5848.896
+## 93   963   6581.661
+## 94   964   6225.619
+## 95   965   1931.792
+## 96   966  18190.296
+## 97   967   1744.642
+## 98   968   9974.414
+## 99   969  15064.367
+## 100  970   2250.269
+## 101  971   5840.364
+## 102  972   5726.531
+## 103  973   2231.498
+## 104  974   1987.530
+## 105  975   5558.334
+## 106  976   1940.630
+## 107  977   7072.157
+## 108  978   2155.751
+## 109  979   9806.713
+## 110  980  18675.435
+## 111  981   1886.786
+## 112  982  10123.369
+## 113  983   2156.017
+## 114  984   2001.126
+## 115  985   5997.737
+## 116  986   2434.757
+## 117  987   2086.726
+## 118  988   6040.799
+## 119  989  10036.415
+## 120  990   2096.938
+## 121  991   6168.458
+## 122  992   2195.150
+## 123  993   6067.952
+## 124  994   6271.886
+## 125  995   5769.066
+## 126  996   6218.090
+## 127  997   2093.841
+## 128  998  14428.877
+## 129  999   9955.433
+## 130 1000   1903.333
+## 131 1001   6790.417
+## 132 1002   6213.513
+## 133 1003   6215.833
+## 134 1004   6897.902
+## 135 1005   2258.594
+## 136 1006   6047.657
+## 137 1007   1964.634
+## 138 1008   5951.689
+## 139 1009  18147.751
+## 140 1010   6333.024
+## 141 1011  10635.195
+## 142 1012   6325.452
+## 143 1013   6015.636
+## 144 1014   6387.099
+## 145 1015   5765.942
+## 146 1016   2041.719
+## 147 1017   2263.577
+## 148 1018  10023.063
+## 149 1019   9797.692
+## 150 1020   2105.211
+## 151 1021   6103.067
+## 152 1022   5935.722
+## 153 1023   5814.464
+## 154 1024  10591.492
+## 155 1025  14363.285
+## 156 1026  18174.810
+## 157 1027   6563.571
+## 158 1028   5886.382
+## 159 1029   5995.338
+## 160 1030  10898.641
+## 161 1031   6036.574
+## 162 1032   2538.492
+## 163 1033   9773.897
+## 164 1034   2129.888
+## 165 1035   6210.679
+## 166 1036   1895.710
+## 167 1037   5399.956
+## 168 1038  10117.968
+## 169 1039   9950.544
+## 170 1040   5796.378
+## 171 1041   1927.274
+## 172 1042   2542.839
+## 173 1043   9961.062
+## 174 1044   6473.333
+## 175 1045   2065.819
+## 176 1046   2325.042
+## 177 1047   6257.302
+## 178 1048   9848.270
+## 179 1049   1943.507
+## 180 1050   6123.722
+## 181 1051  10875.240
+## 182 1052   2023.988
+## 183 1053   5946.889
+## 184 1054   2134.881
+## 185 1055   2311.573
+## 186 1056   2658.434
+## 187 1057   6245.947
+## 188 1058  13727.151
+## 189 1059   6882.542
+## 190 1060   2542.316
+## 191 1061   6430.329
+## 192 1062   5963.534
+## 193 1063   6221.552
+## 194 1064   2162.510
+## 195 1065   6297.093
+## 196 1066   2307.959
+## 197 1067   3100.544
+## 198 1068  18487.840
+## 199 1069   5990.499
+## 200 1070   2096.968
+## 201 1071   2092.063
+## 202 1072   6136.283
+## 203 1073   1812.852
+## 204 1074   6160.742
+## 205 1075   5957.262
+## 206 1076  14369.264
+## 207 1077  18016.985
+## 208 1078   6042.608
+## 209 1079   6297.272
+## 210 1080   6439.578
+## 211 1081   2524.152
+## 212 1082   2046.424
+## 213 1083   2047.477
+## 214 1084   6563.733
+## 215 1085   9497.863
+## 216 1086  10284.453
+## 217 1087   6218.088
+## 218 1088   2397.537
+## 219 1089   2271.331
+## 220 1090   5749.989
+## 221 1091   5680.605
+## 222 1092   6089.979
+## 223 1093   9771.047
+## 224 1094   6034.914
+## 225 1095   6222.557
+## 226 1096   6112.380
+## 227 1097   3011.583
+## 228 1098   2080.198
+## 229 1099   2330.572
+## 230 1100   6170.386
+## 231 1101  17649.922
+## 232 1102   5943.886
+## 233 1103   6225.837
+## 234 1104  11497.476
+## 235 1105   2398.110
+## 236 1106   2070.491
+## 237 1107   2423.777
+## 238 1108   6339.903
+## 239 1109   5552.302
+## 240 1110   6048.203
+## 241 1111   6109.195
+## 242 1112  10323.249
+## 243 1113  10174.223
+## 244 1114   6771.304
+## 245 1115  10489.722
+## 246 1116   2075.150
+## 247 1117   6822.876
+## 248 1118   5995.932
+## 249 1119  10743.818
+## 250 1120   1995.800
+## 251 1121  10350.144
+## 252 1122  14951.994
+## 253 1123   6229.776
+## 254 1124  14349.839
+## 255 1125   1781.901
+## 256 1126   2136.736
+## 257 1127   2196.663
+## 258 1128   5895.610
+## 259 1129  14208.161
+## 260 1130   2361.109
+## 261 1131  10157.397
+## 262 1132  13976.664
+## 263 1133   6058.000
+## 264 1134   2002.542
+## 265 1135   2455.011
+## 266 1136   2594.218
+## 267 1137   2817.084
+## 268 1138   6215.940
+## 269 1139  10368.303
+## 270 1140  13661.589
+## 271 1141   6004.730
+## 272 1142   6092.816
+## 273 1143  10835.799
+## 274 1144   6112.259
+## 275 1145   6522.441
+## 276 1146   5679.175
+## 277 1147   6150.829
+## 278 1148   2241.660
+## 279 1149   2199.471
+## 280 1150   6177.215
+## 281 1151   2081.508
+## 282 1152   6088.985
+## 283 1153   6338.488
+## 284 1154   1774.343
+## 285 1155   6054.774
+## 286 1156  14231.385
+## 287 1157   2208.989
+## 288 1158   6599.882
+## 289 1159   2105.035
+## 290 1160   6258.290
+## 291 1161   2211.283
+## 292 1162  10065.833
+## 293 1163   2059.491
+## 294 1164  10018.908
+## 295 1165   2163.921
+## 296 1166   1874.686
+## 297 1167   9944.738
+## 298 1168   5835.811
+## 299 1169   2240.385
+## 300 1170   2179.194</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

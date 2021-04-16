@@ -1,0 +1,8 @@
+name: "DDS-Website"
+navbar:
+  title: "DDS Website"
+  left:
+    - text: "About Me"
+      href: index.html
+    - text: "Attrition Case Study"
+      href: CaseStudy2-Markdown.html
